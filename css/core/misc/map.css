@@ -1,0 +1,39 @@
+.lzr {
+  .map-viewport {
+    --map-viewport-width: 100svw;
+    --map-viewport-height: calc(100svh - var(--height--header) - var(--height--tab-bar));
+    min-width: var(--map-viewport-width); width: var(--map-viewport-width); max-width: var(--map-viewport-width);
+    min-height: var(--map-viewport-height); height: var(--map-viewport-height); max-height: var(--map-viewport-height);
+    overflow: hidden;
+    touch-action: none; /* important pour capter les gestes tactiles */
+    background: transparent;
+    cursor: grab;
+    &.is-dragging { cursor: grabbing; }
+  }
+
+  .map {
+    --transition: if(
+    /* PHONE */ media(width < 767px):  transform 0.05s linear;
+    /* TABLET */media(width < 1280px): transform 0.05s linear;
+    /* LAPTOP */media(width < 1920px): none;
+    /* DESKTOP */ else:                none;
+    );
+    box-sizing: content-box;
+    width: 5440px;
+    height: 5760px;
+    background-image: url('../../../assets/medias/images/KANTO_MAP_TRANSPARENT.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    /* background-color: black; */
+    /* background: linear-gradient(315deg,rgba(9, 9, 121, 1) 0%, rgba(0, 212, 255, 1) 100%); */
+    transform-origin: 0 0;
+    transition: var(--transition);
+    padding: 500px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+}
