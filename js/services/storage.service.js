@@ -8,15 +8,13 @@ export const setStorage = () => {
     STORAGE.setItem(`${appLocalStorageId}FirstTime`, '0');
     
     let userTMP = {
+      NAME: null,
+      SAVED_FISHES: [],
+      BAN_LIST: [],
       // SETTINGS
+      PREFERED_THEME: 'light',
       KEEP_SCREEN_AWAKE: true,
       IS_ACCESSIBLE_FONT: false,
-      PREFERED_THEME: 'light',
-      PREFERED_SPRITES: 'RB',
-      OPENED_STATS: false,
-      OPENED_SPRITES: false,
-      MUSIC: true,
-      SOUND_EFFECTS: true,
     };
     STORAGE.setItem(`${appLocalStorageId}User`, JSON.stringify(userTMP));
   }

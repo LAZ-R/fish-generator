@@ -16,7 +16,7 @@
     min-height: var(--height--header); height: var(--height--header); max-height: var(--height--header);
     background-color: var(--bg-color);
     color: var(--color--fg-default);
-    padding: 0;
+    padding: 0 var(--horizontal-padding);
     gap: 16px;
     font-weight: 500;
     overflow: hidden;

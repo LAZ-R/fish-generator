@@ -3,13 +3,16 @@
 ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)  
 
-Version `0.0.0.1`
+Version `0.0.0.2`
 
 **[Tester la version déployée sur GitHub Pages](https://laz-r.github.io/fish-generator/)**
 
 ## Présentation
 Générateur de poissons tropicaux
 
+Albino chances    ≈ 0,7426 %
+Melatonic chances ≈ 0,2475 %
+Legendary chances ≈ 0,0999 %
 
 ---
 
@@ -17,6 +20,7 @@ This is mostly a *proof of concept* so the code here is awfull, I know.
 
 ## Changelog
 
+- v 0.0.0.2 - remise au format app + ajout shiny + legendaire + ajout galerie + ajout export et trade
 - v 0.0.0.1 - init
 
 ---

@@ -11,6 +11,7 @@ import { getRandomIntegerBetween } from "../../utils/math.utils.js";
 import { CURRENT_PRESET, CURRENT_ZOOM, getQuarterBounds, initNewMap, isHiddenPointInBounds, setPreset, zoomToQuarter } from "../../services/island-map.service.js";
 import { NEIGHBOUR_PROFILES, PRESETS } from "../../data/island-presets.data.js";
 import { initNewFish } from "../../services/fish-generation.service.js";
+import { onImportFishFileClick } from "../../services/fish-trade.service.js";
 
 // VARIABLES //////////////////////////////////////////////////////////////////////////////////////
 const HEADER_ICON_CONTAINER = document.getElementById('headerIconContainer');
@@ -31,31 +32,12 @@ export function render() {
 
   // Set MAIN layout
   MAIN.innerHTML = `
-  <div class="page-container">
-    Coucou
-  </div>
-  <div id="usernamePopupContainer" class="pop-up-container hidden">
-    <div class="pop-up">
-      <span>Nom d'utilisateur</span>
-      <input id="usernameInput" type="text" class="lzr-input" />
-      <button onclick="onStartClick()" class="lzr-button lzr-solid lzr-success">Démarrer</button>
-    </div>
+  <div class="page-container import-page">
+    <span>Importer un fishier</span>
+    <span>Règles à écrire</span>
+    <input type="file" class="lzr-button lzr-solid" onchange="onImportFishFileClick(event)" accept=".fish" />
   </div>
   `;
 
-  updateMenuDom('homepage');
-
-  let user = getUser();
-  if (user.NAME == null) {
-    document.getElementById('usernamePopupContainer').classList.remove('hidden');
-  }
+  updateMenuDom('import');
 }
-
-function onStartClick() {
-  let username = document.getElementById('usernameInput').value;
-  let user = getUser();
-  user.NAME = username;
-  setUser(user);
-  document.getElementById('usernamePopupContainer').classList.add('hidden');
-}
-window.onStartClick = onStartClick;

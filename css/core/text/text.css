@@ -28,7 +28,7 @@ Pokémon
 /* ---------------------------------------------------------------------- */
 
 .lzr { 
-  --font-family--default: var(--font-family--user), sans-serif;
+  --font-family--default: consolas, sans-serif;
   --font-size--default: 16px;
   font-family: var(--font-family--default);
   font-weight: 300;

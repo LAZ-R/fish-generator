@@ -39,6 +39,9 @@
 
 /* Views */
 @import url("../js/views/homepage/homepage.view.css");
+@import url("../js/views/generator/generator.view.css");
+@import url("../js/views/gallery/gallery.view.css");
+@import url("../js/views/import/import.view.css");
 @import url("../js/views/settings/settings.view.css");
 @import url("../js/views/not-found/not-found.view.css");
 
@@ -55,36 +58,304 @@ footer { view-transition-name: footer; } /* si tu veux animer le footer */
 @keyframes slideOutLeft  { to { transform: translateX(-100%); opacity: 0; } }
 @keyframes slideInRight  { from { transform: translateX(100%); opacity: 0; } } */
 
-:root {
-  --TYPE-COMBAT:  #D3425F;
-  --TYPE-DRAGON:  #0C69C8;
-  --TYPE-EAU:     #539DDF;
-  --TYPE-ELECTRIK:#F2D94E;
-  --TYPE-FEU:     #FBA54C;
-  --TYPE-GLACE:   #75D0C1;
-  --TYPE-INSECTE: #92BC2C;
-  --TYPE-NORMAL:  #A0A29F;
-  --TYPE-PLANTE:  #5FBD58;
-  --TYPE-POISON:  #B763CF;
-  --TYPE-PSY:     #FA8581;
-  --TYPE-ROCHE:   #C9BB8A;
-  --TYPE-SOL:     #DA7C4D;
-  --TYPE-SPECTRE: #5F6DBC;
-  --TYPE-VOL:     #A1BBEC;
+.fish-img-container {
+  aspect-ratio: 1/1;
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+  background-color: hsl(180, 0%, 50%);
+  position: relative;
+
+  &:has(.fish-img.albino), &:has(.fish-img.melanistic) {
+    background-color: hsl(0, 0%, 50%);
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      animation: box-inner-pulse 1s linear infinite;
+      opacity: .5;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      display: flex;
+      top: -50%;
+      left: -60%;
+      width: 50%;
+      height: 200%;
+      opacity: 1;
+      transform: rotate(45deg);
+      background: linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0.13) 0%,
+        rgba(255, 255, 255, 0.13) 77%,
+        rgba(255, 255, 255, 0.5) 92%,
+        rgba(255, 255, 255, 0.0) 100%
+      );
+      transition: none;
+      animation: shine-loop 2s linear infinite;
+    }
+  }
+
+  &:has(.fish-img.legendary) {
+    background-color: hsl(0, 0%, 50%);
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      animation: box-inner-pulse 1s linear infinite;
+      opacity: .5;
+      filter: invert(1);
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      display: flex;
+      top: -50%;
+      left: -60%;
+      width: 50%;
+      height: 200%;
+      opacity: .5;
+      transform: rotate(45deg);
+      background: linear-gradient(
+        to right,
+        hsla(0, 100%, 50%, 0) 0%,
+        hsla(90, 100%, 50%, 0.13) 25%,
+        hsla(180, 100%, 50%, 0.5) 50%,
+        hsla(270, 100%, 50%, 0.15) 92%,
+        hsla(360, 100%, 50%, 0) 100%
+      );
+      transition: none;
+      animation: shine-loop 2s linear infinite;
+    }
+  }
+
+  .fish-img {
+    --main-color: hsl(0, 0%, 50%);
+    --accent-color: hsl(0, 0%, 50%);
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    /* animation: fish-dance 5s linear infinite; */
+
+    &.albino {
+      .grid-cell.eye {
+        background-color: hsl(357, 100%, 66%) !important;
+      }
+    }
+    &.melanistic {
+      --blue1: hsl(195, 88%, 80%);
+      --blue2: hsl(195, 100%, 70%);
+      --orange: hsl(32, 100%, 45%);
+      --red: hsl(357, 100%, 66%);
+      .grid-cell.eye {
+        background-color: var(--red) !important;
+      }
+    }
+    &.legendary {
+      --blue1: hsl(195, 88%, 80%);
+      --blue2: hsl(170, 100%, 40%);
+      --orange: hsl(32, 100%, 45%);
+      --red: hsl(357, 100%, 66%);
+      --pink: hsl(307, 70%, 66%);
+      .grid-cell.eye {
+        background-color: var(--blue2);
+        /* animation: legendary-pulse-main 1s linear infinite; */
+      }
+
+      .grid-cell.main-color {
+        animation: legendary-pulse-main 1s linear infinite;
+        
+        /* &::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background-color: white;
+          opacity: .5;
+        } */
+      }
+      .grid-cell.accent-color {
+        animation: legendary-pulse-accent 1s infinite;
+        /* &::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background-color: black;
+          opacity: .5;
+        } */
+      }
+    }
+  
+    .grid-cell {
+      --cell-size: calc(100% / 16);
+      display: flex;
+      position: relative;
+      justify-content: center;
+      align-items: center;
+      aspect-ratio: 1/1;
+      min-width: var(--cell-size); width: var(--cell-size); max-width: var(--cell-size);
+      min-height: var(--cell-size); height: var(--cell-size); max-height: var(--cell-size);
+      font-size: 12px;
+      color: transparent;
+      overflow: hidden;
+
+      &.body {
+        background-color: hsl(0, 0%, 50%);
+      }
+      &.eye {
+        background-color: hsl(0, 0%, 0%);
+
+        &::after {
+          content: '';
+          position: absolute;
+          /* top: 25%;
+          left: 25%;
+          width: 25%;
+          height: 25%; */
+          inset: 0;
+          width: 50%;
+          height: 50%;
+          background-color: white;
+        }
+      }
+      &.tail {
+        background-color: hsl(0, 0%, 50%);
+      }
+      &.top-fin {
+        background-color: hsl(0, 0%, 50%);
+      }
+      &.bottom-fin {
+        background-color: hsl(0, 0%, 50%);
+      }
+
+      &.main-color {
+        background-color: var(--main-color);
+      }
+      &.accent-color {
+        background-color: var(--accent-color);
+      }
+
+      &.shadow-left {
+        &::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(270deg,hsla(0, 0%, 0%, 50%) 0%, hsla(0, 0%, 0%, 0) 75%, hsla(0, 0%, 0%, 0) 100%);
+          opacity: .5;
+        }
+      }
+
+      &.shadow-bottom {
+        &::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(180deg,hsla(0, 0%, 0%, 50%) 0%, hsla(0, 0%, 0%, 0) 75%, hsla(0, 0%, 0%, 0) 100%);
+          opacity: .5;
+        }
+      }
+
+      &.shadow-top {
+        &::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(0deg,hsla(0, 0%, 0%, 50%) 0%, hsla(0, 0%, 0%, 0) 75%, hsla(0, 0%, 0%, 0) 100%);
+          opacity: .5;
+        }
+      }
+    }
+  }
 }
 
-.type-badge {
-  --size: 32px;
-  --color: red;
+@keyframes fish-dance {
+  0%   { rotate:  5deg; translate: 0%  0%; }
+  25%  { rotate:  0deg; translate: 0%  5%; }
+  50%  { rotate: -5deg; translate: 0%  0%; }
+  75%  { rotate:  0deg; translate: 0% -5%; }
+  100% { rotate:  5deg; translate: 0%  0%; }
+}
+
+@keyframes shine-loop {
+  0%   { left: -200%; }
+  75%  { left:  200%; }
+  100% { left:  200%; }
+}
+
+@keyframes box-inner-pulse {
+  0%   { box-shadow: inset 0px -1px 16px 4px hsla(160, 100%, 100%, 0); }
+  25%  { box-shadow: inset 0px -1px 16px 4px hsla(160, 100%, 100%, .5); }
+  50%  { box-shadow: inset 0px -1px 16px 4px hsla(160, 100%, 100%, 1); }
+  75%  { box-shadow: inset 0px -1px 16px 4px hsla(160, 100%, 100%, .5); }
+  100% { box-shadow: inset 0px -1px 16px 4px hsla(160, 100%, 100%, 0); }
+}
+
+@keyframes legendary-pulse-main {
+  0%   { background-color: var(--accent-color); }
+  25%   { background-color: var(--accent-color); }
+  50%  { background-color: var(--main-color); }
+  75%   { background-color: var(--accent-color); }
+  100% { background-color: var(--accent-color); }
+}
+@keyframes legendary-pulse-accent {
+  0%   { background-color: var(--accent-color); }
+  25%  { background-color: var(--main-color); }
+  50% { background-color: var(--accent-color); }
+  100% { background-color: var(--accent-color); }
+}
+
+.pop-up-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100svw;
+  height: 100svh;
+  background-color: hsla(0, 0%, 0%, .5);
+  z-index: 999;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-width: var(--size); width: var(--size); max-width: var(--size);
-  min-height: var(--size); height: var(--size); max-height: var(--size);
-  background-color: var(--color);
-  border-radius: 500px;
+  padding: 16px var(--horizontal-padding);
 
-  .type-icon {
-    height: 55%;
+  &.hidden {
+    display: none;
+  }
+
+  .pop-up {
+    width: 75%;
+    height: fit-content;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+    gap: 16px;
+    position: relative;
+
+    .lzr-input {
+      width: 100%;
+    }
+
+    .buttons-container{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
   }
 }

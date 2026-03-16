@@ -115,31 +115,31 @@
   /* =================================================== */
 
   --color--primary: if(
-    style(--theme: 'light'):       hsl(28, 80%, 55%)/* hsl(28, 80%, 36%) */;
+    style(--theme: 'light'):       hsl(180, 80%, 25%)/* hsl(160, 80%, 36%) */;
     style(--theme: 'dark'):        hsl(330, 90%, 60%); 
     style(--theme: 'alternative'): hsl(177, 63%, 67%); 
     else: #333333
   );
   --color--primary--hover: if(
-    style(--theme: 'light'):       hsl(28, 80%, 60%);
+    style(--theme: 'light'):       hsl(180, 80%, 20%);
     style(--theme: 'dark'):        hsl(330, 90%, 75%); 
     style(--theme: 'alternative'): hsl(177, 63%, 72%);
     else: #333333
   );
   --color--primary--active: if(
-    style(--theme: 'light'):       hsl(28, 80%, 65%);
+    style(--theme: 'light'):       hsl(180, 80%, 15%);
     style(--theme: 'dark'):        hsl(330, 90%, 80%); 
     style(--theme: 'alternative'): hsl(177, 63%, 77%); 
     else: #333333
   );
   --color--primary--alpha: if(
-    style(--theme: 'light'):       hsl(28, 80%, 37%, .1);
+    style(--theme: 'light'):       hsl(180, 80%, 25%, .1);
     style(--theme: 'dark'):        hsl(330, 90%, 70%, .1); 
     style(--theme: 'alternative'): hsl(177, 63%, 67%, .1); 
     else: #333333
   );
   --color--outline--primary: if(
-    style(--theme: 'light'):       hsl(28, 80%, 37%, 33%);
+    style(--theme: 'light'):       hsl(180, 80%, 25%, 33%);
     style(--theme: 'dark'):        hsl(330, 90%, 70%, 33%); 
     style(--theme: 'alternative'): hsl(177, 63%, 67%, 33%); 
     else: #333333
@@ -552,8 +552,8 @@
 
   /* header height */
   --height--header: if(
-    /* PHONE */ media(width < 767px):  0px;
-    /* TABLET */media(width < 1280px): 0px;
+    /* PHONE */ media(width < 767px):  64px;
+    /* TABLET */media(width < 1280px): 64px;
     /* LAPTOP */media(width < 1920px): 64px;
     /* DESKTOP */ else:                64px;
   );
@@ -573,8 +573,8 @@
 
   /* menu mobile height */
   --height--tab-bar: if(
-    /* PHONE */ media(width < 767px):  0px;
-    /* TABLET */media(width < 1280px): 0px;
+    /* PHONE */ media(width < 767px):  64px;
+    /* TABLET */media(width < 1280px): 64px;
     /* LAPTOP */media(width < 1920px): 0px;
     /* DESKTOP */ else:                0px;
   );

@@ -8,7 +8,7 @@
     align-items: flex-start;
     min-width: 100%; width: 100%; max-width: 100%;
     min-height: var(--height--main); height: var(--height--main); max-height: var(--height--main);
-    background-color: black;
+    background-color: var(--color--bg-html);
     overflow-x: hidden;
     overflow-y: scroll;
     margin: 0;

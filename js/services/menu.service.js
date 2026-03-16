@@ -3,11 +3,14 @@ import { getSvgIcon } from "./icons.service.js";
 
 export const ENTRIES = [
   // PRIMARY
-  { id: 'homepage',            route: '/',                    label: 'Accueil',              iconName: 'home',             primary: true, },
+  { id: 'homepage',            route: '/',                    label: 'Accueil',              iconName: 'home',            primary: true, },
+  { id: 'generator',           route: '/generator',           label: 'Générateur',           iconName: 'arrows-rotate',   primary: true, },
+  { id: 'gallery',             route: '/gallery',             label: 'Galerie',              iconName: 'gallery',         primary: true, },
+  { id: 'import',              route: '/import',              label: 'Import',               iconName: 'file-arrow-down', primary: true, },
   // SECONDARY
   // SETTINGS
-  { id: 'settings',            route: '/settings',            label: 'Paramètres',           iconName: 'gear',             primary: 'NA', },
-];
+  { id: 'settings',            route: '/settings',            label: 'Paramètres',           iconName: 'gear',            primary: 'NA', },
+]; 
 const TAB_BAR = document.getElementById('tabBar');
 const SIDE_BAR = document.getElementById('sideBar');
 

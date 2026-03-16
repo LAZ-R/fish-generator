@@ -32,52 +32,6 @@ export function render() {
   <div class="page-container">
     ${ isLaptopOrUp ? `<h1>Paramètres</h1>` : '' }
 
-    <h2>Sprites</h2>
-
-    <div class="settings-group">
-      <div id="preferedSpritesContainer" class="themes-container">
-        <div class="lzr-radio-group">
-          <div class="lzr-radio-raw" onclick="onPreferedSpritesClick('RG')">
-            <label for="RG">Rouge / Verte</label>
-            <input type="radio" class="lzr-radio" id="RG" name="sprites" value="RG" ${user.PREFERED_SPRITES == 'RG' ? 'checked' : ''} />
-          </div>
-
-          <div class="lzr-radio-raw" onclick="onPreferedSpritesClick('RB')">
-            <label for="RB">Rouge / Bleue</label>
-            <input type="radio" class="lzr-radio" id="RB" name="sprites" value="RB" ${user.PREFERED_SPRITES == 'RB' ? 'checked' : ''} />
-          </div>
-
-          <div class="lzr-radio-raw" onclick="onPreferedSpritesClick('Y')">
-            <label for="Y">Jaune</label>
-            <input type="radio" class="lzr-radio" id="Y" name="sprites" value="Y" ${user.PREFERED_SPRITES == 'Y' ? 'checked' : ''} />
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <hr> <!-- ------------------------------------------------------------- -->
-
-    <h2>Audio</h2>
-
-    <div class="settings-group">
-      <div class="setting-block">
-        <span>Musique</span>
-        <label class="lzr-switch">
-          <input type="checkbox" onclick="onMusicClick(event)" ${user.MUSIC ? 'checked' : ''} />
-          <span class="slider"></span>
-        </label>
-      </div>
-      <div class="setting-block">
-        <span>Effets sonores</span>
-        <label class="lzr-switch">
-          <input type="checkbox" onclick="onSoundEffectsClick(event)" ${user.SOUND_EFFECTS ? 'checked' : ''} />
-          <span class="slider"></span>
-        </label>
-      </div>
-    </div>
-
-    <hr> <!-- ------------------------------------------------------------- -->
-
     <h2>Thème</h2>
 
     <div class="settings-group">
@@ -148,8 +102,6 @@ export function render() {
   FOOTER.innerHTML = ``;
 
   updateMenuDom('settings');
-
-  playMusic('pokemon-center');
 }
 
 export function getStorageDom() {

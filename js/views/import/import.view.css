@@ -1,0 +1,8 @@
+.page-container.import-page {
+  align-items: center;
+  gap: 16px;
+
+  .lzr-button {
+    width: 100%;
+  }
+}

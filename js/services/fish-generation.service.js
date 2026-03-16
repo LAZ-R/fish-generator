@@ -1,6 +1,7 @@
 import { NEIGHBOUR_PROFILES, PRESETS } from "../data/island-presets.data.js";
 import { APP_ORIGIN } from "../router.js";
 import { getRandomIntegerBetween } from "../utils/math.utils.js";
+import { getUser } from "./storage.service.js";
 
 
 export let CURRENT_PRESET = {...PRESETS[0]};
@@ -18,10 +19,16 @@ let CURRENT_VIEW_BOUNDS = {
   startY: 1,
   endY: IMG_Y_SIZE
 };
-let CURRENT_FISH = {
-  img: {},
+export let CURRENT_FISH = {
+  id: null,
+  grid: {},
   main_color: 'hsl(0, 50%, 50%)',
   accent_color: 'hsl(0, 50%, 50%)',
+  isLegendary: false,
+  isAlbino: false,
+  isMelanistic: false,
+  isLiked: false,
+  creator: null,
 }
 
 function getCellKey(xCoord, yCoord) {
@@ -162,7 +169,7 @@ function pickNeighbourType(weights) {
   return 'plus';
 }
 
-function generateImgObject() {
+function generateNewCurrentFishObject() {
   let isEyeGenerated = false;
 
   // UNAVAILABLE
@@ -385,7 +392,7 @@ function generateImgObject() {
       break;
   }
 
-  // TOP FIN
+  // TOP FIN //////////////////////////////////////////////////////////////////
 
   // First line
   let topFinFirstLineCore = FULL_IMG[getCellKey(12, 5)];
@@ -438,7 +445,7 @@ function generateImgObject() {
     }
   }
 
-  // BOTTOM FIN
+  // BOTTOM FIN ///////////////////////////////////////////////////////////////
 
   // First line
   let bottomFinFirstLineCore = FULL_IMG[getCellKey(12, 12)];
@@ -489,14 +496,8 @@ function generateImgObject() {
   }
 
 
+  // PATTERN //////////////////////////////////////////////////////////////////
 
-
-
-
-
-
-
-  // COLORS
   previousCells = Object.values(FULL_IMG).filter((e) => (e.isBody || e.isTail || e.isTopFin || e.isBottomFin) && !e.isEye);
   for (let previousCell of previousCells) {
     let cell = FULL_IMG[getCellKey(previousCell.x_coord, previousCell.y_coord)];
@@ -508,73 +509,96 @@ function generateImgObject() {
     }
   }
 
+  // COLORS ///////////////////////////////////////////////////////////////////
 
+  let legendaryRnd = getRandomIntegerBetween(0, 1000);
+  let shinyRnd = getRandomIntegerBetween(0, 100);
 
+  if (legendaryRnd <= 0) {
+    // LEGENDARY ==============================================================
+    CURRENT_FISH.isLegendary = true;
+    CURRENT_FISH.isAlbino = false;
+    CURRENT_FISH.isMelanistic = false;
+
+    /* let rnd1 = getRandomIntegerBetween(0, 179);
+    let rnd2 = getRandomIntegerBetween(180, 359);
+
+    CURRENT_FISH.main_color = `hsl(${rnd1}, ${getRandomIntegerBetween(0, 100)}%, ${getRandomIntegerBetween(0, 100)}%)`;
+    CURRENT_FISH.accent_color = `hsl(${rnd2}, ${getRandomIntegerBetween(0, 100)}%, ${getRandomIntegerBetween(0, 100)}%)`; */
+
+    CURRENT_FISH.main_color = `white`;
+    CURRENT_FISH.accent_color = `black`;
+
+  } else if (shinyRnd <= 0) {
+    // SHINY ==================================================================
+    let melanisticRnd = getRandomIntegerBetween(0, 100);
+    if (melanisticRnd <= 25) {
+      CURRENT_FISH.isLegendary = false;
+      CURRENT_FISH.isAlbino = false;
+      CURRENT_FISH.isMelanistic = true;
+      CURRENT_FISH.main_color = `hsl(0, 0%, 0%)`;
+      CURRENT_FISH.accent_color = `hsl(${getRandomIntegerBetween(225, 235)}, ${getRandomIntegerBetween(15, 20)}%, ${getRandomIntegerBetween(10, 15)}%)`;
+    } else {
+      CURRENT_FISH.isLegendary = false;
+      CURRENT_FISH.isAlbino = true;
+      CURRENT_FISH.isMelanistic = false;
+      CURRENT_FISH.main_color = `hsl(0, 0%, 100%)`;
+      CURRENT_FISH.accent_color = `hsl(${getRandomIntegerBetween(20, 35)}, ${getRandomIntegerBetween(40, 60)}%, ${getRandomIntegerBetween(90, 95)}%)`;
+    }
+  } else {
+    // NORMAL =================================================================
+    CURRENT_FISH.isLegendary = false;
+    CURRENT_FISH.isAlbino = false;
+    CURRENT_FISH.isMelanistic = false;
+    let rnd1 = getRandomIntegerBetween(0, 100);
+    let rnd2 = getRandomIntegerBetween(0, 100);
+    let isMainBright = rnd1 <= 50;
+    let isMainSaturated = rnd2 <= 50;
+    let mainBrightness = getRandomIntegerBetween(isMainBright ? 50 : 10, isMainBright ? 90 : 50);
+    let mainSaturation = getRandomIntegerBetween(isMainSaturated ? 50 : 10, isMainSaturated ? 90 : 50);
+    let accentBrightness = getRandomIntegerBetween(isMainBright ? 10 : 50, isMainBright ? 50 : 90);
+    let accentSaturation = getRandomIntegerBetween(isMainSaturated ? 10 : 50, isMainSaturated ? 50 : 90);
+    CURRENT_FISH.main_color = `hsl(${getRandomIntegerBetween(0, 360)}, ${mainSaturation}%, ${mainBrightness}%)`;
+    CURRENT_FISH.accent_color = `hsl(${getRandomIntegerBetween(0, 360)}, ${accentSaturation}%, ${accentBrightness}%)`;
+  }
+  
+  CURRENT_FISH.grid = FULL_IMG;
+  CURRENT_FISH.id = Date.now();
+  CURRENT_FISH.creator = getUser().NAME;
 }
 
-
-function renderCurrentView() {
-  renderImgFromBounds(CURRENT_VIEW_BOUNDS);
+function getCellDom(cell) {
+  let cellCssStr = '';
+  if (cell.isUnavailable) cellCssStr += ' unavailable';
+  if (cell.isBody) cellCssStr += ' body';
+  if (cell.isEye) cellCssStr += ' eye';
+  if (cell.isTail) cellCssStr += ' tail';
+  if (cell.isTopFin) cellCssStr += ' top-fin';
+  if (cell.isBottomFin) cellCssStr += ' bottom-fin';
+  const cellHtml = `
+    <div 
+      id="${cell.x_coord}-${cell.y_coord}" 
+      class="grid-cell ${cellCssStr} ${cell.isMainColor ? 'main-color' : ''} ${cell.isAccentColor ? 'accent-color' : ''} ${cell.isTail && cell.x_coord == 7 ? 'shadow-left' : ''} ${cell.isBottomFin && cell.y_coord == 12 ? 'shadow-bottom' : ''} ${cell.isTopFin && cell.y_coord == 5 ? 'shadow-top' : ''}">
+    </div>`;
+  return cellHtml;
 }
 
-function renderImgFromBounds(bounds) {
-  let imgContainer = document.getElementById('imgContainer');
-  imgContainer.innerHTML = '';
+export function getFishDom(fish) {
+  let htmlString = `<div class="fish-img ${fish.isAlbino ? 'albino' : ''} ${fish.isMelanistic ? 'melanistic' : ''} ${fish.isLegendary ? 'legendary' : ''}" style="--main-color: ${fish.main_color}; --accent-color: ${fish.accent_color};">`;
 
-  // A. calculer la taille logique de la vue
-  const visibleWidth = bounds.endX - bounds.startX + 1;
-  const visibleHeight = bounds.endY - bounds.startY + 1;
-
-  imgContainer.style.setProperty( '--x-size', visibleWidth);
-  imgContainer.style.setProperty( '--main-color', CURRENT_FISH.main_color);
-  imgContainer.style.setProperty( '--accent-color', CURRENT_FISH.accent_color);
-
-  //B. injecter dans le conteneur les cellules de cette zone seulement
-  let htmlString = '';
-
-  for (let y = bounds.startY; y <= bounds.endY; y++) {
-    for (let x = bounds.startX; x <= bounds.endX; x++) {
-      const cell = FULL_IMG[getCellKey(x, y)];
-      let cellCssStr = '';
-      if (cell.isUnavailable) cellCssStr += ' unavailable';
-      if (cell.isBody) cellCssStr += ' body';
-      if (cell.isEye) cellCssStr += ' eye';
-      if (cell.isTail) cellCssStr += ' tail';
-      if (cell.isTopFin) cellCssStr += ' top-fin';
-      if (cell.isBottomFin) cellCssStr += ' bottom-fin';
-      const cellHtml = `
-        <div 
-          id="${cell.x_coord}-${cell.y_coord}" 
-          class="grid-cell ${cellCssStr} ${cell.isMainColor ? 'main-color' : ''} ${cell.isAccentColor ? 'accent-color' : ''} ${cell.isTail && cell.x_coord == 7 ? 'shadow-left' : ''} ${cell.isBottomFin && cell.y_coord == 12 ? 'shadow-bottom' : ''} ${cell.isTopFin && cell.y_coord == 5 ? 'shadow-top' : ''}">
-        </div>`;
-      htmlString += cellHtml;
+  for (let y = 1; y <= 16; y++) {
+    for (let x = 1; x <= 16; x++) {
+      const cell = fish.grid[getCellKey(x, y)];
+      htmlString += getCellDom(cell);
     }
   }
 
-  imgContainer.innerHTML = htmlString;
+  htmlString += `</div>`;
+
+  return htmlString;
 }
 
-export function initNewImg() {
-  // Img generation
+export function initNewFish() {
   setupGrid();
-  generateImgObject();
-  CURRENT_FISH.img = FULL_IMG;
-  // Colors
-  // Main
-  let rnd1 = getRandomIntegerBetween(0, 100);
-  let rnd2 = getRandomIntegerBetween(0, 100);
-  let isMainBright = rnd1 <= 50;
-  let isMainSaturated = rnd2 <= 50;
-  let mainBrightness = getRandomIntegerBetween(isMainBright ? 50 : 10, isMainBright ? 90 : 50);
-  let mainSaturation = getRandomIntegerBetween(isMainSaturated ? 50 : 10, isMainSaturated ? 90 : 50);
-  let accentBrightness = getRandomIntegerBetween(isMainBright ? 10 : 50, isMainBright ? 50 : 90);
-  let accentSaturation = getRandomIntegerBetween(isMainSaturated ? 10 : 50, isMainSaturated ? 50 : 90);
-  CURRENT_FISH.main_color = `hsl(${getRandomIntegerBetween(0, 360)}, ${mainSaturation}%, ${mainBrightness}%)`;
-  CURRENT_FISH.accent_color = `hsl(${getRandomIntegerBetween(0, 360)}, ${accentSaturation}%, ${accentBrightness}%)`;
-  //setHiddenPoint();
-
-  // Render
-  CURRENT_ZOOM = 1;
-  resetCurrentViewBounds();
-  renderCurrentView();
+  generateNewCurrentFishObject();
 }
