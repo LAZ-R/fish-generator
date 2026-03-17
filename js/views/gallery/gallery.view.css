@@ -2,12 +2,18 @@
   
 }
 
+.top-bar {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
 .saved-fishes-container {
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
   flex-wrap: wrap;
-  width: 100%;
+  min-width: 100%;
   gap: 16px;
 }
 
@@ -29,6 +35,19 @@
   box-shadow: 0px 4px 10px 1px rgba(0,0,0,0.3);
   background-color: white;
   position: relative;
+
+  &.liked {
+
+    &::after {
+      content: '❤︎';
+      position: absolute;
+      top: calc(var(--width) - calc(var(--padding) * 4) - 2px);
+      right: 16px;
+      color: var(--color--bg-default);
+      font-size: 22px;
+      line-height: 22px;
+    }
+  }
 
   .fish-id {
     font-weight: 700;
@@ -56,6 +75,13 @@
   width: 100%;
   -webkit-box-shadow: 0px 4px 10px 1px rgba(0,0,0,0.3); 
   box-shadow: 0px 4px 10px 1px rgba(0,0,0,0.3);
+  position: relative;
+
+  .buttons-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
 
   .fish-id {
     font-weight: 700;
@@ -67,9 +93,20 @@
 
   .close-button {
     position: absolute;
-    top: calc(-38px - var(--horizontal-padding));
+    top: calc(-38px - 16px);
     right: 0;
     filter: invert(1);
+  }
+
+  #likeButton {
+    position: absolute;
+    top: calc(100svw - calc(2*var(--horizontal-padding)) - 16px - 42px );
+    right: 16px;
+    outline: none;
+
+    &.inverted {
+      filter: invert(1);
+    }
   }
 }
 

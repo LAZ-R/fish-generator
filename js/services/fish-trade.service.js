@@ -122,7 +122,7 @@ function decodeFishFromImport(text) {
 
 
 export function downloadFishFile(fish) {
-  const blob = new Blob([encodeFishForExport(fish)], { type: 'text/plain' });
+  const blob = new Blob([encodeFishForExport(fish)], { type: 'application/octet-stream' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = `${fish.id}.fish`;

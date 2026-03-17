@@ -6,7 +6,7 @@ export const ENTRIES = [
   { id: 'homepage',            route: '/',                    label: 'Accueil',              iconName: 'home',            primary: true, },
   { id: 'generator',           route: '/generator',           label: 'Générateur',           iconName: 'arrows-rotate',   primary: true, },
   { id: 'gallery',             route: '/gallery',             label: 'Galerie',              iconName: 'gallery',         primary: true, },
-  { id: 'import',              route: '/import',              label: 'Import',               iconName: 'file-arrow-down', primary: true, },
+  { id: 'trade',              route: '/trade',               label: 'Échanges',             iconName: 'up-down',         primary: true, },
   // SECONDARY
   // SETTINGS
   { id: 'settings',            route: '/settings',            label: 'Paramètres',           iconName: 'gear',            primary: 'NA', },

@@ -43,8 +43,8 @@ export function render() {
 
   <div id="nicknamePopupContainer" class="pop-up-container hidden">
     <div class="pop-up">
-      <span>Nommez votre poisson</span>
-      <input id="nicknameInput" type="text" class="lzr-input" />
+      <span>Nommez votre poisson<br>(optionnel)</span>
+      <input id="nicknameInput" type="text" maxlength="15" class="lzr-input" />
       <div class="buttons-container">
         <button onclick="onCancelClick()" class="lzr-button lzr-outlined lzr-error">Annuler</button>
         <button onclick="onConfirmClick()" class="lzr-button lzr-solid lzr-success">Sauvegarder</button>

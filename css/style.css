@@ -41,7 +41,7 @@
 @import url("../js/views/homepage/homepage.view.css");
 @import url("../js/views/generator/generator.view.css");
 @import url("../js/views/gallery/gallery.view.css");
-@import url("../js/views/import/import.view.css");
+@import url("../js/views/trade/trade.view.css");
 @import url("../js/views/settings/settings.view.css");
 @import url("../js/views/not-found/not-found.view.css");
 
@@ -336,7 +336,7 @@ footer { view-transition-name: footer; } /* si tu veux animer le footer */
   }
 
   .pop-up {
-    width: 75%;
+    width: fit-content;
     height: fit-content;
     background-color: white;
     display: flex;
@@ -346,16 +346,14 @@ footer { view-transition-name: footer; } /* si tu veux animer le footer */
     padding: 16px;
     gap: 16px;
     position: relative;
-
-    .lzr-input {
-      width: 100%;
-    }
+    text-align: center;
 
     .buttons-container{
       display: flex;
       justify-content: space-between;
       align-items: center;
       width: 100%;
+      gap: 16px;
     }
   }
 }

@@ -170,8 +170,36 @@ function pickNeighbourType(weights) {
 }
 
 function generateNewCurrentFishObject() {
-  let isEyeGenerated = false;
+  // RARITY
+  let legendaryRnd = getRandomIntegerBetween(0, 1000);
+  let shinyRnd = getRandomIntegerBetween(0, 100);
 
+  if (legendaryRnd <= 0) {
+    // LEGENDARY ==============================================================
+    CURRENT_FISH.isLegendary = true;
+    CURRENT_FISH.isAlbino = false;
+    CURRENT_FISH.isMelanistic = false;
+  } else if (shinyRnd <= 0) {
+    // SHINY ==================================================================
+    let melanisticRnd = getRandomIntegerBetween(0, 100);
+    if (melanisticRnd <= 25) {
+      // MELANISTIC ===========================================================
+      CURRENT_FISH.isLegendary = false;
+      CURRENT_FISH.isAlbino = false;
+      CURRENT_FISH.isMelanistic = true;
+    } else {
+      // ALBINO ===============================================================
+      CURRENT_FISH.isLegendary = false;
+      CURRENT_FISH.isAlbino = true;
+      CURRENT_FISH.isMelanistic = false;
+    }
+  } else {
+    // NORMAL =================================================================
+    CURRENT_FISH.isLegendary = false;
+    CURRENT_FISH.isAlbino = false;
+    CURRENT_FISH.isMelanistic = false;
+  }
+  
   // UNAVAILABLE
   let UNAVAILABLE_CELLS = [
     // Diag Nord Ouest
@@ -215,25 +243,19 @@ function generateNewCurrentFishObject() {
   }
 
   // EYES
-  let EYES_BOUNDS = { min_x:  12, min_y:  7, max_x: 13, max_y: 9 };
-  allImgCells = Object.values(FULL_IMG);
-  for (let cell of allImgCells) {
-    let isInXBounds = cell.x_coord >= EYES_BOUNDS.min_x && cell.x_coord <= EYES_BOUNDS.max_x;
-    let isInYBounds = cell.y_coord >= EYES_BOUNDS.min_y && cell.y_coord <= EYES_BOUNDS.max_y;
-    if (isInXBounds && isInYBounds) {
-      if (!isEyeGenerated) {
-        let rnd = getRandomIntegerBetween(0, 100);
-        if (rnd <= 25) {
-          cell.isEye = true;
-          isEyeGenerated = true;
-        }
-        if (cell.x_coord == EYES_BOUNDS.max_x && cell.y_coord == EYES_BOUNDS.max_y && !isEyeGenerated) {
-          cell.isEye = true;
-          isEyeGenerated = true;
-        }
-      }
-    }
-  }
+  const EYE_CELLS = [
+    { x: 12, y: 7 },
+    { x: 13, y: 7 },
+    { x: 12, y: 8 },
+    { x: 13, y: 8 },
+    { x: 12, y: 9 },
+    { x: 13, y: 9 },
+  ];
+
+  const randomIndex = getRandomIntegerBetween(0, EYE_CELLS.length - 1);
+  const chosen = EYE_CELLS[randomIndex];
+
+  FULL_IMG[getCellKey(chosen.x, chosen.y)].isEye = true;
 
   // TAIL /////////////////////////////////////////////////////////////////////
 
@@ -351,7 +373,7 @@ function generateNewCurrentFishObject() {
       currentCells[1].isTail = false;
     }
     rnd = getRandomIntegerBetween(0, 100);
-    if (rnd <= 50) {
+    if (rnd <= CURRENT_FISH.isLegendary ? 75 : CURRENT_FISH.isMelanistic || CURRENT_FISH.isAlbino ? 60 : 50) {
       currentCells[2].isTail = false;
     }
   }
@@ -372,7 +394,7 @@ function generateNewCurrentFishObject() {
       for (let previousCell of previousCells) {
         let leftCell = FULL_IMG[getCellKey(previousCell.x_coord - 1, previousCell.y_coord)];
         let rnd = getRandomIntegerBetween(0, 100);
-        if (rnd <= 75) {
+        if (rnd <= CURRENT_FISH.isLegendary ? 50 : CURRENT_FISH.isMelanistic || CURRENT_FISH.isAlbino ? 60 : 75) {
           leftCell.isTail = true;
         }
       }
@@ -410,12 +432,12 @@ function generateNewCurrentFishObject() {
 
   // Second line
   let topFinSecondLineRnd = getRandomIntegerBetween(0, 100);
-  if (topFinSecondLineRnd <= 60) {
+  if (topFinSecondLineRnd <= CURRENT_FISH.isLegendary ? 80 : CURRENT_FISH.isMelanistic || CURRENT_FISH.isAlbino ? 70 : 60) {
     previousCells = Object.values(FULL_IMG).filter((e) => (e.isTopFin));
     for (let previousCell of previousCells) {
       let topLeftCell = FULL_IMG[getCellKey(previousCell.x_coord - 1, previousCell.y_coord - 1)];
       let rnd = getRandomIntegerBetween(0, 100);
-      if (rnd <= 50 && topLeftCell.x_coord > 7) {
+      if (rnd <= (CURRENT_FISH.isLegendary ? 54 : CURRENT_FISH.isMelanistic || CURRENT_FISH.isAlbino ? 52 : 50) && topLeftCell.x_coord > 7) {
         topLeftCell.isTopFin = true;
       }
     }
@@ -423,7 +445,7 @@ function generateNewCurrentFishObject() {
 
   // Third line
   let topFinThirdLineRnd = getRandomIntegerBetween(0, 100);
-  if (topFinThirdLineRnd <= 60) {
+  if (topFinThirdLineRnd <= CURRENT_FISH.isLegendary ? 80 : CURRENT_FISH.isMelanistic || CURRENT_FISH.isAlbino ? 70 : 60) {
     previousCells = Object.values(FULL_IMG).filter((e) => (e.isTopFin && e.y_coord == 4));
     for (let previousCell of previousCells) {
       let typeRnd = getRandomIntegerBetween(0, 100);
@@ -431,14 +453,14 @@ function generateNewCurrentFishObject() {
         // Diag type
         let topLeftCell = FULL_IMG[getCellKey(previousCell.x_coord - 1, previousCell.y_coord - 1)];
         let rnd = getRandomIntegerBetween(0, 100);
-        if (rnd <= 50 && topLeftCell.x_coord > 7) {
+        if (rnd <= (CURRENT_FISH.isLegendary ? 54 : CURRENT_FISH.isMelanistic || CURRENT_FISH.isAlbino ? 52 : 50) && topLeftCell.x_coord > 7) {
           topLeftCell.isTopFin = true;
         }
       } else {
         // Top type
         let topCell = FULL_IMG[getCellKey(previousCell.x_coord, previousCell.y_coord - 1)];
         let rnd = getRandomIntegerBetween(0, 100);
-        if (rnd <= 50) {
+        if (rnd <= (CURRENT_FISH.isLegendary ? 54 : CURRENT_FISH.isMelanistic || CURRENT_FISH.isAlbino ? 52 : 50)) {
           topCell.isTopFin = true;
         }
       }
@@ -460,12 +482,12 @@ function generateNewCurrentFishObject() {
 
   // Second line
   let bottomFinSecondLineRnd = getRandomIntegerBetween(0, 100);
-  if (bottomFinSecondLineRnd <= 50) {
+  if (bottomFinSecondLineRnd <= CURRENT_FISH.isLegendary ? 75 : CURRENT_FISH.isMelanistic || CURRENT_FISH.isAlbino ? 60 : 50) {
     previousCells = Object.values(FULL_IMG).filter((e) => (e.isBottomFin));
     for (let previousCell of previousCells) {
       let bottomLeftCell = FULL_IMG[getCellKey(previousCell.x_coord - 1, previousCell.y_coord + 1)];
       let rnd = getRandomIntegerBetween(0, 100);
-      if (rnd <= 50 && bottomLeftCell.x_coord > 7) {
+      if (rnd <= (CURRENT_FISH.isLegendary ? 54 : CURRENT_FISH.isMelanistic || CURRENT_FISH.isAlbino ? 52 : 50) && bottomLeftCell.x_coord > 7) {
         bottomLeftCell.isBottomFin = true;
       }
     }
@@ -473,7 +495,7 @@ function generateNewCurrentFishObject() {
 
   // Third line
   let bottomFinThirdLineRnd = getRandomIntegerBetween(0, 100);
-  if (bottomFinThirdLineRnd <= 50) {
+  if (bottomFinThirdLineRnd <= CURRENT_FISH.isLegendary ? 75 : CURRENT_FISH.isMelanistic || CURRENT_FISH.isAlbino ? 60 : 50) {
     previousCells = Object.values(FULL_IMG).filter((e) => (e.isBottomFin && e.y_coord == 13));
     for (let previousCell of previousCells) {
       let typeRnd = getRandomIntegerBetween(0, 100);
@@ -481,14 +503,14 @@ function generateNewCurrentFishObject() {
         // Diag type
         let bottomLeftCell = FULL_IMG[getCellKey(previousCell.x_coord - 1, previousCell.y_coord + 1)];
         let rnd = getRandomIntegerBetween(0, 100);
-        if (rnd <= 50 && bottomLeftCell.x_coord > 7) {
+        if (rnd <= (CURRENT_FISH.isLegendary ? 54 : CURRENT_FISH.isMelanistic || CURRENT_FISH.isAlbino ? 52 : 50) && bottomLeftCell.x_coord > 7) {
           bottomLeftCell.isBottomFin = true;
         }
       } else {
         // Bottom type
         let bottomCell = FULL_IMG[getCellKey(previousCell.x_coord, previousCell.y_coord + 1)];
         let rnd = getRandomIntegerBetween(0, 100);
-        if (rnd <= 50) {
+        if (rnd <= (CURRENT_FISH.isLegendary ? 54 : CURRENT_FISH.isMelanistic || CURRENT_FISH.isAlbino ? 52 : 50)) {
           bottomCell.isBottomFin = true;
         }
       }
@@ -511,45 +533,19 @@ function generateNewCurrentFishObject() {
 
   // COLORS ///////////////////////////////////////////////////////////////////
 
-  let legendaryRnd = getRandomIntegerBetween(0, 1000);
-  let shinyRnd = getRandomIntegerBetween(0, 100);
-
-  if (legendaryRnd <= 0) {
+  if (CURRENT_FISH.isLegendary) {
     // LEGENDARY ==============================================================
-    CURRENT_FISH.isLegendary = true;
-    CURRENT_FISH.isAlbino = false;
-    CURRENT_FISH.isMelanistic = false;
-
-    /* let rnd1 = getRandomIntegerBetween(0, 179);
-    let rnd2 = getRandomIntegerBetween(180, 359);
-
-    CURRENT_FISH.main_color = `hsl(${rnd1}, ${getRandomIntegerBetween(0, 100)}%, ${getRandomIntegerBetween(0, 100)}%)`;
-    CURRENT_FISH.accent_color = `hsl(${rnd2}, ${getRandomIntegerBetween(0, 100)}%, ${getRandomIntegerBetween(0, 100)}%)`; */
-
     CURRENT_FISH.main_color = `white`;
     CURRENT_FISH.accent_color = `black`;
-
-  } else if (shinyRnd <= 0) {
-    // SHINY ==================================================================
-    let melanisticRnd = getRandomIntegerBetween(0, 100);
-    if (melanisticRnd <= 25) {
-      CURRENT_FISH.isLegendary = false;
-      CURRENT_FISH.isAlbino = false;
-      CURRENT_FISH.isMelanistic = true;
-      CURRENT_FISH.main_color = `hsl(0, 0%, 0%)`;
-      CURRENT_FISH.accent_color = `hsl(${getRandomIntegerBetween(225, 235)}, ${getRandomIntegerBetween(15, 20)}%, ${getRandomIntegerBetween(10, 15)}%)`;
-    } else {
-      CURRENT_FISH.isLegendary = false;
-      CURRENT_FISH.isAlbino = true;
-      CURRENT_FISH.isMelanistic = false;
-      CURRENT_FISH.main_color = `hsl(0, 0%, 100%)`;
-      CURRENT_FISH.accent_color = `hsl(${getRandomIntegerBetween(20, 35)}, ${getRandomIntegerBetween(40, 60)}%, ${getRandomIntegerBetween(90, 95)}%)`;
-    }
+  } else if (CURRENT_FISH.isMelanistic) {
+    // MELANISTIC =============================================================
+    CURRENT_FISH.main_color = `hsl(0, 0%, 0%)`;
+    CURRENT_FISH.accent_color = `hsl(${getRandomIntegerBetween(225, 235)}, ${getRandomIntegerBetween(15, 20)}%, ${getRandomIntegerBetween(10, 15)}%)`;
+  } else if (CURRENT_FISH.isAlbino) {
+    // ALBINO =================================================================
+    CURRENT_FISH.main_color = `hsl(0, 0%, 100%)`;
+    CURRENT_FISH.accent_color = `hsl(${getRandomIntegerBetween(20, 35)}, ${getRandomIntegerBetween(40, 60)}%, ${getRandomIntegerBetween(90, 95)}%)`;
   } else {
-    // NORMAL =================================================================
-    CURRENT_FISH.isLegendary = false;
-    CURRENT_FISH.isAlbino = false;
-    CURRENT_FISH.isMelanistic = false;
     let rnd1 = getRandomIntegerBetween(0, 100);
     let rnd2 = getRandomIntegerBetween(0, 100);
     let isMainBright = rnd1 <= 50;

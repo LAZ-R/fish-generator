@@ -127,6 +127,17 @@
   border-radius: 0px 0px 16px 16px;
   padding: var(--horizontal-padding) var(--horizontal-padding);
   gap: 16px;
+
+  .lzr-button {
+    height: calc(calc(100svh - 100svw - var(--height--header) - var(--height--tab-bar) - calc(2 * 16px) - 16px) / 2);
+  }
+
+}
+
+#nicknameInput {
+  font-family: 'consolas';
+  font-size: 16px;
+  width: 150px;
 }
 
 

@@ -27,7 +27,7 @@ const routes = {
   '/':                    () => import('./views/homepage/homepage.view.js'),
   '/generator':           () => import('./views/generator/generator.view.js'),
   '/gallery':             () => import('./views/gallery/gallery.view.js'),
-  '/import':              () => import('./views/import/import.view.js'),
+  '/trade':               () => import('./views/trade/trade.view.js'),
   '/settings':            () => import('./views/settings/settings.view.js'),
   '/404':                 () => import('./views/not-found/not-found.view.js'),
 };

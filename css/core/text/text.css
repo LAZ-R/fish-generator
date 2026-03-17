@@ -61,6 +61,10 @@ Pokémon
     margin-top: 0;
   }
 
+  strong {
+    font-weight: 700;
+  }
+
   .txt-primary { color: var(--color--primary); }
   .txt-success { color: var(--color--success); }
   .txt-error { color: var(--color--error); }

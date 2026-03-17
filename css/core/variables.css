@@ -145,7 +145,7 @@
     else: #333333
   );
   --color--on-primary: if(
-    style(--theme: 'light'):       var(--color--bg-95);
+    style(--theme: 'light'):       var(--color--fg-95);
     style(--theme: 'dark'):        var(--color--fg-85);
     style(--theme: 'alternative'): var(--color--fg-85);
     else: #333333
@@ -542,7 +542,7 @@
   --box-shadow--default: 0px 6px 8px #0000008f;
   --box-shadow--strong: 0px 7px 10px #000000ab;
 
-  --border-radius--default: 8px;
+  --border-radius--default: 0px;
   --border-radius--button: var(--border-radius--default);
   --border-radius--select: var(--border-radius--default);
 
